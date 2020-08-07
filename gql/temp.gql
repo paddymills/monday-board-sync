@@ -1,0 +1,103 @@
+# query 1
+query (
+  $main_board_id: Int!,
+  $regal_board_id: Int!,
+  $job_8: Int!,
+  # $linked_val: JSON!
+) {
+  boards (ids: [$main_board_id, $regal_board_id]) {
+    id,
+    name,
+    groups {
+      id,
+      title,
+      items (ids: [$job_8]) {
+        id
+        name
+        column_values {
+          id
+          text
+          value
+        }
+      }
+    }
+  }
+}
+`
+
+# mutation 1: create item only
+mutation (
+  $regal_board_id: Int!,
+  $main_group_id: String!
+) {
+	create_item (
+    board_id: $regal_board_id,
+    group_id: $main_group_id,
+    item_name: "Job 8",
+  ) {
+		id
+	}
+}
+`
+
+# mutation 1a: create item with link
+mutation (
+  $regal_board_id: Int!,
+  $main_group_id: String!,
+  $linked_values_for_regal: JSON!
+) {
+	create_item (
+    board_id: $regal_board_id,
+    group_id: $main_group_id,
+    item_name: "Job 8",
+    column_values: $linked_values_for_regal
+  ) {
+		id
+	}
+}
+
+# mutation 2: create link in child
+mutation (
+  $regal_board_id: Int!,
+  $regal_item_id: Int!
+  $linked_val_for_regal: JSON!
+) {
+	change_column_value  (
+    board_id: $regal_board_id,
+    item_id: $regal_item_id,
+    column_id: "link_to_item",
+    value: $linked_val_for_regal,
+  ) {
+		id
+	}
+}
+
+# mutation 2: create link in parent
+mutation (
+  $main_board_id: Int!,
+  $main_item_id: Int!
+  $linked_val_for_main: JSON!
+) {
+	change_column_value  (
+    board_id: $main_board_id,
+    item_id: $main_item_id,
+    column_id: "link_to_v___s_1",
+    value: $linked_val_for_main,
+  ) {
+		id
+	}
+}
+
+# variables
+{
+  "main_board_id": 670023245,
+  "regal_board_id": 670099426,
+  "main_group_id": "topics",
+  "main_item_id": 670111964,
+  "regal_item_id": 671455956,
+  "linked_val_for_regal": "{\"linkedPulseIds\":[{\"linkedPulseId\":670111964}]}",
+  "linked_values_for_regal": "{\"link_to_item\": {\"linkedPulseIds\":[{\"linkedPulseId\":670111964}]}}",
+  "linked_val_for_main": "{\"linkedPulseIds\":[{\"linkedPulseId\":671455956}]}",
+  "linked_values_for_main": "{\"link_to_item\": {\"linkedPulseIds\":[{\"linkedPulseId\":671455956}]}}"
+  "multiple_values_for_main": "{\"boardIds\":[670064281, 670099426]}"
+}
