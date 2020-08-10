@@ -1,7 +1,11 @@
 {
-  "name": "monday-integration-quickstart-app",
+  "name": "monday-osv-sync-app",
   "version": "0.0.1",
-  "license": "UNLICENSED",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paddymills/monday-osv-sync.git"
+  },
   "scripts": {
     "start": "npm run stop && concurrently \"npm run server\" \"npm run expose\"",
     "server": "nodemon ./src/app.js",
