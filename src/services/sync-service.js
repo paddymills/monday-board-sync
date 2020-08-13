@@ -1,4 +1,4 @@
-class TransformationService {
+class syncService {
   static async transformText(value, type) {
     switch (type) {
       case 'TO_UPPER_CASE':
@@ -13,7 +13,9 @@ class TransformationService {
 
   static async changeColumnValue(token, boardId, itemId, columnId, value) {
     try {
-      const mondayClient = initMondayClient({ token });
+      const mondayClient = initMondayClient({
+        token
+      });
 
       const query = `mutation change_column_value($boardId: Int!, $itemId: Int!, $columnId: String!, $value: JSON!) {
         change_column_value(board_id: $boardId, item_id: $itemId, column_id: $columnId, value: $value) {
@@ -21,9 +23,16 @@ class TransformationService {
         }
       }
       `;
-      const variables = { boardId, columnId, itemId, value };
+      const variables = {
+        boardId,
+        columnId,
+        itemId,
+        value
+      };
 
-      const response = await mondayClient.api(query, { variables });
+      const response = await mondayClient.api(query, {
+        variables
+      });
       return response;
     } catch (err) {
       console.log(err);
@@ -31,4 +40,4 @@ class TransformationService {
   }
 }
 
-module.exports = TransformationService;
+module.exports = syncService;

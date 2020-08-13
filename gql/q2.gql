@@ -1,0 +1,20 @@
+query (
+  $main: Int!,
+  $vns: Int!
+) {
+  boards 
+  (ids: [$main, $vns] ) {
+    id,
+    name,
+    items (limit: 5) {
+      id,
+      name,
+      column_values
+      (ids: ["bol", "status", "vendor_link"]) {
+        id,
+        text,
+        value
+      }
+    }
+  }
+}

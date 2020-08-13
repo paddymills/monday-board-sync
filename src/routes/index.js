@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const transformationRoutes = require('./transformation');
+const syncRoutes = require('./sync');
 
-router.use(transformationRoutes);
-router.get('/', function(req, res) {
+router.use(syncRoutes);
+router.get('/', function (req, res) {
   res.json(getHealth());
 });
 
-router.get('/health', function(req, res) {
+router.get('/health', function (req, res) {
   res.json(getHealth());
   res.end();
 });

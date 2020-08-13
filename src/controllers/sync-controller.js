@@ -1,23 +1,26 @@
 const mondayService = require('../services/monday-service');
-const transformationService = require('../services/transformation-service');
+const syncService = require('../services/sync-service');
 const {
-  TRANSFORMATION_TYPES
+  SYNC_TYPES
 } = require('../constants');
 const API_TOKEN = process.env.API_TOKEN;
 
-async function transformToMondayColumn(req, res) {
+async function copyToMondayColumn(req, res) {
   const {
     payload
   } = req.body;
+
   const {
     inboundFieldValues
   } = payload;
+
+  // NEEDS UPDATED TO MATCH RECIPE!!!!!!!!
   const {
     boardId,
     itemId,
     sourceColumnId,
     targetColumnId,
-    transformationType
+    syncType
   } = inboundFieldValues;
 
   const token = API_TOKEN;
@@ -25,15 +28,17 @@ async function transformToMondayColumn(req, res) {
   if (!text) {
     return res.status(200).send({});
   }
-  const transformedText = await transformationService.transformText(text, transformationType ? transformationType.value : 'TO_UPPER_CASE');
+
+  // NEEDS UPDATED !!!!!!!!!!!!!!!
+  const transformedText = await syncService.transformText(text, syncType ? syncType.value : 'TO_UPPER_CASE');
 
   await mondayService.changeColumnValue(token, boardId, itemId, targetColumnId, transformedText);
 
   return res.status(200).send({});
 }
 
-async function getTransformationTypes(req, res) {
-  return res.status(200).send(TRANSFORMATION_TYPES);
+async function getSyncTypes(req, res) {
+  return res.status(200).send(SYNC_TYPES);
 }
 
 async function subscribe(req, res) {
@@ -50,8 +55,8 @@ async function unsubscribe(req, res) {
 }
 
 module.exports = {
-  transformToMondayColumn,
-  getTransformationTypes,
+  copyToMondayColumn,
+  getSyncTypes,
   subscribe,
   unsubscribe
 };
